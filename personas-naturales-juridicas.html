@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personas Naturales y Jurídicas – Civil IA Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red:      #C8102E;
+      --red-dark: #8B0B1F;
+      --red-glow: rgba(200,16,46,0.18);
+      --white:    #F5F5F5;
+      --black:    #0D0D0D;
+      --gray-dk:  #1A1A1A;
+      --gray-md:  #2E2E2E;
+      --gray-lt:  #888;
+      --border:   rgba(255,255,255,0.08);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', sans-serif;
+      --font-mono:    'Space Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a { color: var(--red); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { display: block; max-width: 100%; }
+
+    /* HEADER */
+    header {
+      background: rgba(13,13,13,.95);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-content {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .btn-back {
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      background: var(--red);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      padding: .5rem 1rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-back:hover { background: var(--red-dark); }
+
+    /* MAIN CONTENT */
+    .container { max-width: 1120px; margin: 0 auto; padding: 4rem 1.5rem; }
+    .page-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      color: var(--white);
+    }
+    .page-subtitle {
+      font-size: 1.1rem;
+      color: var(--gray-lt);
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+    .section-content {
+      background: var(--gray-dk);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--red);
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--red);
+      padding-bottom: .8rem;
+    }
+    .content-text {
+      color: var(--white);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+    .content-text p {
+      margin-bottom: 1rem;
+    }
+    .highlight {
+      background: rgba(200,16,46,.15);
+      border-left: 3px solid var(--red);
+      padding: 1rem 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 6px;
+      font-style: italic;
+    }
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    @media(max-width:768px) { .comparison-grid { grid-template-columns: 1fr; } }
+    .comparison-card {
+      background: var(--gray-md);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+    .comparison-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--red);
+      margin-bottom: 1rem;
+    }
+    .comparison-card ul {
+      list-style: none;
+      padding: 0;
+    }
+    .comparison-card li {
+      padding: .5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    .comparison-card li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--red);
+      font-weight: bold;
+    }
+    .examples-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .example-card {
+      background: var(--gray-md);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+    .example-card h4 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--red);
+      margin-bottom: .5rem;
+    }
+    .example-card p {
+      font-size: .9rem;
+      color: var(--gray-lt);
+    }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; font-size: .75rem; color: var(--gray-lt); font-family: var(--font-mono); letter-spacing: .06em; margin-top: 3rem; }
+    footer strong { color: var(--red); }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-content">
+      <h1 class="header-title">Civil IA Lab</h1>
+      <button class="btn-back" onclick="window.history.back()">← Volver</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <h1 class="page-title">Personas Naturales y Jurídicas</h1>
+    <p class="page-subtitle">Entiende la diferencia fundamental que todo estudiante de Derecho debe dominar</p>
+
+    <!-- Introducción -->
+    <div class="section-content">
+      <h2 class="section-title">Introducción</h2>
+      <div class="content-text">
+        <p>En el derecho civil, uno de los conceptos más fundamentales es el de la <strong>personalidad jurídica</strong>. ¿Sabías que tú eres una persona jurídica desde que naces? Pero también lo es una empresa, una sociedad o una asociación. La clave está en entender que la ley reconoce a ciertos sujetos como titulares de derechos y obligaciones.</p>
+        <p>En esta lección, exploraremos las diferencias esenciales entre personas naturales y personas jurídicas, conceptos cruciales que fundamentan todo el sistema legal ecuatoriano.</p>
+      </div>
+    </div>
+
+    <!-- ¿Qué es una Persona Natural? -->
+    <div class="section-content">
+      <h2 class="section-title">¿Qué es una Persona Natural?</h2>
+      <div class="content-text">
+        <p>Una <strong>persona natural</strong> es todo ser humano que existe y vive de acuerdo con las leyes. Desde el momento del nacimiento, el derecho te reconoce como un sujeto capaz de tener derechos y contraer obligaciones.</p>
+        <div class="highlight">
+          <p><strong>Definición Legal:</strong> Según el Código Civil Ecuatoriano, la existencia legal de toda persona natural principia al nacer, es decir, al separarse completamente de la madre.</p>
+        </div>
+        <p><strong>Características principales:</strong></p>
+        <ul style="margin-left: 1.5rem; color: var(--gray-lt);">
+          <li>Capacidad jurídica desde el nacimiento</li>
+          <li>Derechos y obligaciones personales</li>
+          <li>Responsabilidad civil y penal individual</li>
+          <li>Patrimonio propio</li>
+          <li>Nombre y domicilio como identificadores</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ¿Qué es una Persona Jurídica? -->
+    <div class="section-content">
+      <h2 class="section-title">¿Qué es una Persona Jurídica?</h2>
+      <div class="content-text">
+        <p>Una <strong>persona jurídica</strong> (también llamada persona moral o ficticia) es una entidad creada por la ley a la que se le confieren derechos y obligaciones, aunque no sea un ser humano. Es una ficción legal que permite que colectividades de personas o patrimonios destinados a un fin específico actúen como un sujeto de derecho único.</p>
+        <div class="highlight">
+          <p><strong>Definición Legal:</strong> Las personas jurídicas son sujetos de derechos y obligaciones que la ley crea para que tengan existencia jurídica, capacidad para adquirir derechos y contraer obligaciones, así como para comparecer en juicio.</p>
+        </div>
+        <p><strong>Tipos principales:</strong></p>
+        <ul style="margin-left: 1.5rem; color: var(--gray-lt);">
+          <li><strong>Sociedades civiles y mercantiles</strong> - Asociaciones de personas para un fin común</li>
+          <li><strong>Corporaciones</strong> - Agrupaciones permanentes autorizadas por ley</li>
+          <li><strong>Fundaciones</strong> - Patrimonios dedicados a un fin de interés público o privado</li>
+          <li><strong>El Estado</strong> - Como persona jurídica de derecho público</li>
+          <li><strong>Municipios y entidades públicas</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Comparación -->
+    <div class="section-content">
+      <h2 class="section-title">Comparación: Personas Naturales vs. Jurídicas</h2>
+      <div class="comparison-grid">
+        <div class="comparison-card">
+          <h3>Personas Naturales</h3>
+          <ul>
+            <li>Son seres humanos</li>
+            <li>Capacidad limitada por edad y estado mental</li>
+            <li>Responsabilidad personal ilimitada</li>
+            <li>Patrimonio individual</li>
+            <li>Identificación: Nombre y Cédula</li>
+            <li>Fallecimiento termina la existencia legal</li>
+            <li>Pueden tener representantes legales</li>
+          </ul>
+        </div>
+        <div class="comparison-card">
+          <h3>Personas Jurídicas</h3>
+          <ul>
+            <li>Son entidades ficticias creadas por ley</li>
+            <li>Capacidad determinada por su constitución</li>
+            <li>Responsabilidad limitada (según su tipo)</li>
+            <li>Patrimonio colectivo o dedicado</li>
+            <li>Identificación: Nombre y RUC</li>
+            <li>Pueden existir indefinidamente</li>
+            <li>Representadas por un órgano directivo</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ejemplos Prácticos -->
+    <div class="section-content">
+      <h2 class="section-title">Ejemplos Prácticos</h2>
+      <div class="examples-list">
+        <div class="example-card">
+          <h4>📌 Juan es Persona Natural</h4>
+          <p>Juan, estudiante de 20 años, es una persona natural. Puede firmar contratos, abrir una cuenta bancaria, ser demandado y debe responder por sus deudas con todo su patrimonio.</p>
+        </div>
+        <div class="example-card">
+          <h4>🏢 "Civil IA Lab UTN" es Persona Jurídica</h4>
+          <p>El semillero de investigación, como institución, es una persona jurídica que puede ser propietaria de bienes, suscribir contratos y ser demandada, separadamente de sus miembros.</p>
+        </div>
+        <div class="example-card">
+          <h4>🏭 "Empresa XYZ S.A." es Persona Jurídica</h4>
+          <p>Una sociedad anónima es una persona jurídica independiente de sus accionistas. Si la empresa contrae deuda, los accionistas no responden personalmente (responsabilidad limitada).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conclusión -->
+    <div class="section-content">
+      <h2 class="section-title">Conclusión</h2>
+      <div class="content-text">
+        <p>La distinción entre personas naturales y personas jurídicas es fundamental en el derecho civil. Mientras que una persona natural es el ser humano con capacidad de derecho desde el nacimiento, una persona jurídica es una entidad creada por la ley con personalidad propia e independencia legal de sus integrantes.</p>
+        <div class="highlight">
+          <p><strong>Punto clave:</strong> Comprender esta diferencia es esencial para entender cómo funciona el sistema legal y cómo se regulan las relaciones entre individuos, empresas e instituciones en la sociedad ecuatoriana.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Civil IA Lab – UTN Ibarra. Todos los derechos reservados. | Contenido Educativo | <strong>Derecho Civil</strong></p>
+  </footer>
+
+  <script>
+    // Smooth scroll behavior for all links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
