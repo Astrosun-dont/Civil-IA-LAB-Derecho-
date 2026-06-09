@@ -340,8 +340,8 @@
   <section id="hero">
     <div class="hero-orb"></div>
     <div class="hero-content">
-      <div class="hero-eyebrow">Bienvenido a</div>
-      <h1 class="hero-title">
+      <p class="hero-eyebrow">Universidad Técnica del Norte · Carrera de Derecho</p>
+      <h1 class="hero-title" aria-label="Civil IA Lab">
         <span class="word word-civil">
           <span class="char" style="animation-delay: 0.0s;">C</span>
           <span class="char" style="animation-delay: 0.05s;">i</span>
@@ -359,21 +359,19 @@
           <span class="char" style="animation-delay: 0.45s;">b</span>
         </span>
       </h1>
-      <p class="hero-sub">Difundiendo conocimientos de derecho civil con inteligencia artificial</p>
-      <div class="hero-badge">
-        <span>Proyecto UTN</span>
-      </div>
+      <p class="hero-sub">Investigación dinámica del Derecho Civil Ecuatoriano mediante inteligencia artificial y gamificación jurídica</p>
+      <div class="hero-badge">Semillero de Investigación activo · UTN 2025</div>
     </div>
   </section>
 
   <!-- TOOLBAR -->
-  <div id="toolbar">
-    <button class="tb-btn active" onclick="scrollToSection('quienes')">Quiénes somos</button>
-    <button class="tb-btn" onclick="scrollToSection('trabajos')">Trabajos</button>
-    <button class="tb-btn" onclick="scrollToSection('proceso')">Proceso</button>
-    <button class="tb-btn" onclick="scrollToSection('redes')">Redes</button>
-    <button class="tb-btn" onclick="scrollToSection('contacto')">Contacto</button>
-  </div>
+  <nav id="toolbar">
+    <a class="tb-btn" href="#quienes">⚖ Quiénes Somos</a>
+    <a class="tb-btn" href="#trabajos">🎬 Trabajos Terminados</a>
+    <a class="tb-btn" href="#proceso">🔬 Proceso de Elaboración</a>
+    <a class="tb-btn" href="#redes">📡 Redes Sociales</a>
+    <a class="tb-btn" href="#contacto">✉ Contacto</a>
+  </nav>
 
   <!-- QUIÉNES SOMOS -->
   <section id="quienes" class="section">
@@ -384,7 +382,7 @@
       <div class="qs-card">
         <div class="qs-role">Dirección</div>
         <div class="qs-name">Dr. Profesor</div>
-        <div class="qs-email">profesor@utn.edu.ar</div>
+        <div class="qs-email">profesor@utn.edu.ec</div>
       </div>
       <div class="qs-card">
         <div class="qs-role">Desarrollo</div>
@@ -393,40 +391,40 @@
       </div>
       <div class="qs-card">
         <div class="qs-role">Contenido</div>
-        <div class="qs-name">Especialistas</div>
+        <div class="qs-name">Especialistas en Derecho</div>
         <div class="qs-email">contenido@civilialab.com</div>
       </div>
     </div>
     <div class="mission-block">
       <div class="mission-card">
         <h3>Misión</h3>
-        <p>Democratizar el acceso a conocimientos de derecho civil mediante tecnología de IA, brindando herramientas educativas innovadoras para estudiantes y profesionales.</p>
+        <p>Investigar y desarrollar soluciones innovadoras aplicando IA y gamificación jurídica para fortalecer la enseñanza-aprendizaje del Derecho Civil Ecuatoriano en la UTN.</p>
       </div>
       <div class="mission-card">
         <h3>Visión</h3>
-        <p>Convertirse en la plataforma líder de educación legal asistida por IA en América Latina, transformando la forma en que se enseña y se aprende derecho civil.</p>
+        <p>Ser un semillero de investigación referente en la integración de tecnología e IA en la educación legal, contribuyendo a la formación de profesionales del derecho críticos e innovadores.</p>
       </div>
     </div>
   </section>
 
-  <!-- TRABAJOS -->
+  <!-- TRABAJOS TERMINADOS -->
   <section id="trabajos" class="section">
     <div class="section-eyebrow">Nuestro trabajo</div>
-    <h2 class="section-title">Proyectos destacados</h2>
+    <h2 class="section-title">Trabajos Terminados</h2>
     <div class="section-divider"></div>
     <div class="trabajos-grid">
       <div class="trabajo-card">
         <div class="trabajo-header">
           <div class="trabajo-num">01</div>
-          <h3 class="trabajo-title">Chatbot Legal IA</h3>
-          <p class="trabajo-desc">Asistente inteligente entrenado en jurisprudencia y doctrina legal para consultas inmediatas.</p>
+          <h3 class="trabajo-title">Análisis de Jurisprudencia con IA</h3>
+          <p class="trabajo-desc">Sistema de clasificación y análisis de sentencias ecuatorianas utilizando machine learning.</p>
         </div>
         <div class="trabajo-media">
           <div class="media-label">Tecnologías</div>
           <div class="media-links">
             <span class="media-link">Python</span>
             <span class="media-link">NLP</span>
-            <span class="media-link">API REST</span>
+            <span class="media-link">TensorFlow</span>
           </div>
         </div>
       </div>
@@ -434,24 +432,8 @@
       <div class="trabajo-card">
         <div class="trabajo-header">
           <div class="trabajo-num">02</div>
-          <h3 class="trabajo-title">Análisis de Precedentes</h3>
-          <p class="trabajo-desc">Herramienta que utiliza ML para identificar patrones en jurisprudencia y jurisprudencia.</p>
-        </div>
-        <div class="trabajo-media">
-          <div class="media-label">Tecnologías</div>
-          <div class="media-links">
-            <span class="media-link">Machine Learning</span>
-            <span class="media-link">Data Science</span>
-            <span class="media-link">Analytics</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="trabajo-card">
-        <div class="trabajo-header">
-          <div class="trabajo-num">03</div>
-          <h3 class="trabajo-title">Plataforma Educativa</h3>
-          <p class="trabajo-desc">Sistema de aprendizaje personalizado con módulos interactivos y evaluaciones adaptativas.</p>
+          <h3 class="trabajo-title">Plataforma Educativa Gamificada</h3>
+          <p class="trabajo-desc">Aplicación interactiva que transforma el aprendizaje de Derecho Civil en experiencias gamificadas.</p>
         </div>
         <div class="trabajo-media">
           <div class="media-label">Tecnologías</div>
@@ -462,22 +444,38 @@
           </div>
         </div>
       </div>
+
+      <div class="trabajo-card">
+        <div class="trabajo-header">
+          <div class="trabajo-num">03</div>
+          <h3 class="trabajo-title">Chatbot Legal Especializado</h3>
+          <p class="trabajo-desc">Asistente IA entrenado en legislación civil ecuatoriana para consultas y asesoramiento jurídico.</p>
+        </div>
+        <div class="trabajo-media">
+          <div class="media-label">Tecnologías</div>
+          <div class="media-links">
+            <span class="media-link">GPT-4</span>
+            <span class="media-link">LangChain</span>
+            <span class="media-link">API REST</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- PROCESO -->
+  <!-- PROCESO DE ELABORACIÓN -->
   <section id="proceso" class="section">
-    <div class="section-eyebrow">Cómo funciona</div>
-    <h2 class="section-title">Nuestro Proceso</h2>
+    <div class="section-eyebrow">Metodología</div>
+    <h2 class="section-title">Proceso de Elaboración</h2>
     <div class="section-divider"></div>
     <div class="proceso-list">
       <div class="proceso-item">
         <button class="proceso-trigger" onclick="toggleProcess(this)">
           <div class="proceso-thumb">📚</div>
           <div class="proceso-meta">
-            <div class="proceso-meta-num">PASO 01</div>
-            <div class="proceso-meta-title">Recopilación de Conocimiento</div>
-            <div class="proceso-meta-sub">Compilación de doctrina, jurisprudencia y legislación civil vigente</div>
+            <div class="proceso-meta-num">FASE 01</div>
+            <div class="proceso-meta-title">Investigación Jurídica</div>
+            <div class="proceso-meta-sub">Recopilación y análisis de legislación ecuatoriana y jurisprudencia</div>
           </div>
           <div class="proceso-arrow">▼</div>
         </button>
@@ -485,16 +483,16 @@
           <div class="proceso-inner">
             <div class="proceso-info">
               <h4>Descripción</h4>
-              <p>Se recopila y organiza toda la información legal relevante de fuentes confiables, instituciones académicas y bases de datos judiciales.</p>
+              <p>Se realiza investigación exhaustiva de fuentes de derecho civil ecuatoriano, incluyendo códigos, sentencias y doctrina especializada.</p>
               <ul>
-                <li>Análisis de legislación vigente</li>
-                <li>Clasificación de jurisprudencia</li>
-                <li>Revisión de doctrina especializada</li>
+                <li>Revisión del Código Civil Ecuatoriano</li>
+                <li>Análisis de jurisprudencia de cortes</li>
+                <li>Consulta con docentes especializados</li>
               </ul>
             </div>
             <div class="proceso-img-placeholder">
-              <span>📖</span>
-              <p>Fase de investigación</p>
+              <span>⚖️</span>
+              <p>Fase de Investigación Legal</p>
             </div>
           </div>
         </div>
@@ -504,9 +502,9 @@
         <button class="proceso-trigger" onclick="toggleProcess(this)">
           <div class="proceso-thumb">🤖</div>
           <div class="proceso-meta">
-            <div class="proceso-meta-num">PASO 02</div>
-            <div class="proceso-meta-title">Entrenamiento de Modelos IA</div>
-            <div class="proceso-meta-sub">Desarrollo de algoritmos y redes neuronales especializadas</div>
+            <div class="proceso-meta-num">FASE 02</div>
+            <div class="proceso-meta-title">Desarrollo de Modelos IA</div>
+            <div class="proceso-meta-sub">Entrenamiento de algoritmos con datos judiciales ecuatorianos</div>
           </div>
           <div class="proceso-arrow">▼</div>
         </button>
@@ -514,16 +512,16 @@
           <div class="proceso-inner">
             <div class="proceso-info">
               <h4>Descripción</h4>
-              <p>Se entrenan modelos de inteligencia artificial con los datos recopilados para generar respuestas precisas y contextualmente relevantes.</p>
+              <p>Se desarrollan modelos de IA especializados en el análisis y procesamiento de información jurídica ecuatoriana.</p>
               <ul>
-                <li>Procesamiento de lenguaje natural (NLP)</li>
+                <li>Procesamiento de Lenguaje Natural (NLP)</li>
                 <li>Machine Learning supervisado</li>
                 <li>Validación con expertos legales</li>
               </ul>
             </div>
             <div class="proceso-img-placeholder">
-              <span>⚙️</span>
-              <p>Fase de desarrollo IA</p>
+              <span>🧠</span>
+              <p>Fase de Desarrollo IA</p>
             </div>
           </div>
         </div>
@@ -531,11 +529,11 @@
 
       <div class="proceso-item">
         <button class="proceso-trigger" onclick="toggleProcess(this)">
-          <div class="proceso-thumb">🎓</div>
+          <div class="proceso-thumb">🎮</div>
           <div class="proceso-meta">
-            <div class="proceso-meta-num">PASO 03</div>
-            <div class="proceso-meta-title">Integración Educativa</div>
-            <div class="proceso-meta-sub">Creación de contenido interactivo y experiencias de aprendizaje</div>
+            <div class="proceso-meta-num">FASE 03</div>
+            <div class="proceso-meta-title">Diseño Gamificado</div>
+            <div class="proceso-meta-sub">Integración de mecánicas de juego en experiencias educativas</div>
           </div>
           <div class="proceso-arrow">▼</div>
         </button>
@@ -543,16 +541,16 @@
           <div class="proceso-inner">
             <div class="proceso-info">
               <h4>Descripción</h4>
-              <p>Se integra la IA en módulos educativos diseñados pedagógicamente para facilitar el aprendizaje activo y significativo.</p>
+              <p>Se diseñan experiencias educativas interactivas usando gamificación para mejorar la retención y motivación del aprendizaje.</p>
               <ul>
-                <li>Diseño instruccional</li>
-                <li>Generación de ejercicios adaptativos</li>
-                <li>Evaluación formativa continua</li>
+                <li>Diseño instruccional gamificado</li>
+                <li>Sistema de puntos y logros</li>
+                <li>Desafíos y simulaciones jurídicas</li>
               </ul>
             </div>
             <div class="proceso-img-placeholder">
-              <span>📊</span>
-              <p>Fase de integración educativa</p>
+              <span>🏆</span>
+              <p>Fase de Gamificación</p>
             </div>
           </div>
         </div>
@@ -562,9 +560,9 @@
         <button class="proceso-trigger" onclick="toggleProcess(this)">
           <div class="proceso-thumb">🚀</div>
           <div class="proceso-meta">
-            <div class="proceso-meta-num">PASO 04</div>
-            <div class="proceso-meta-title">Lanzamiento y Mejora Continua</div>
-            <div class="proceso-meta-sub">Despliegue de plataforma con monitoreo y optimización</div>
+            <div class="proceso-meta-num">FASE 04</div>
+            <div class="proceso-meta-title">Implementación y Mejora</div>
+            <div class="proceso-meta-sub">Despliegue, testing y optimización continua</div>
           </div>
           <div class="proceso-arrow">▼</div>
         </button>
@@ -572,16 +570,16 @@
           <div class="proceso-inner">
             <div class="proceso-info">
               <h4>Descripción</h4>
-              <p>La plataforma se pone en marcha con sistemas de monitoreo para garantizar calidad, seguridad y mejora continua basada en feedback.</p>
+              <p>Se implementa la plataforma en el aula y se recopila feedback para mejoras iterativas constantes.</p>
               <ul>
-                <li>Despliegue en producción</li>
-                <li>Monitoreo de performance</li>
-                <li>Actualizaciones según feedback</li>
+                <li>Pruebas piloto con estudiantes</li>
+                <li>Recopilación de feedback</li>
+                <li>Optimización y escalabilidad</li>
               </ul>
             </div>
             <div class="proceso-img-placeholder">
-              <span>🎯</span>
-              <p>Fase de optimización</p>
+              <span>✅</span>
+              <p>Fase de Implementación</p>
             </div>
           </div>
         </div>
@@ -598,26 +596,26 @@
       <div class="red-card">
         <div class="red-icon">📘</div>
         <div class="red-platform">Facebook</div>
-        <div class="red-handle">Civil IA Lab</div>
-        <div class="red-link">facebook.com/civilialab</div>
+        <div class="red-handle">Civil IA Lab UTN</div>
+        <div class="red-link">facebook.com/civilialabUTN</div>
       </div>
       <div class="red-card">
         <div class="red-icon">𝕏</div>
         <div class="red-platform">Twitter</div>
-        <div class="red-handle">@civilialab</div>
-        <div class="red-link">twitter.com/civilialab</div>
+        <div class="red-handle">@civilialabUTN</div>
+        <div class="red-link">twitter.com/civilialabUTN</div>
       </div>
       <div class="red-card">
         <div class="red-icon">💼</div>
         <div class="red-platform">LinkedIn</div>
         <div class="red-handle">Civil IA Lab - UTN</div>
-        <div class="red-link">linkedin.com/company/civilialab</div>
+        <div class="red-link">linkedin.com/company/civilialabUTN</div>
       </div>
       <div class="red-card">
         <div class="red-icon">📺</div>
         <div class="red-platform">YouTube</div>
-        <div class="red-handle">Civil IA Lab</div>
-        <div class="red-link">youtube.com/@civilialab</div>
+        <div class="red-handle">Civil IA Lab UTN</div>
+        <div class="red-link">youtube.com/@civilialabUTN</div>
       </div>
     </div>
   </section>
@@ -629,19 +627,19 @@
     <div class="section-divider"></div>
     <div class="contact-grid">
       <div class="contact-info">
-        <p>¿Tienes preguntas o sugerencias? Nos encantaría escucharte. Completa el formulario y nos pondremos en contacto lo antes posible.</p>
+        <p>¿Tienes preguntas o sugerencias sobre nuestro semillero? Nos gustaría conocer tu perspectiva. Completa el formulario y nos pondremos en contacto pronto.</p>
         <div class="contact-detail">
           <div class="contact-row">
             <span>Email</span>
-            <span>info@civilialab.com</span>
+            <span>civilialab@utn.edu.ec</span>
           </div>
           <div class="contact-row">
             <span>Teléfono</span>
-            <span>+54 (11) 0000-0000</span>
+            <span>+593 (6) 2-XXX-XXXX</span>
           </div>
           <div class="contact-row">
             <span>Ubicación</span>
-            <span>Universidad Tecnológica Nacional, Buenos Aires, Argentina</span>
+            <span>Universidad Técnica del Norte, Ibarra, Ecuador</span>
           </div>
         </div>
       </div>
@@ -669,26 +667,27 @@
 
   <!-- FOOTER -->
   <footer>
-    <p>© 2025 Civil IA Lab – UTN. Todos los derechos reservados. | Hecho con ❤️ por el equipo de <strong>Civil IA Lab</strong></p>
+    <p>© 2025 Civil IA Lab – UTN Ibarra. Todos los derechos reservados. | Semillero de Investigación | Derecho Civil & IA</p>
   </footer>
 
   <script>
-    // Navigation scroll
-    function scrollToSection(sectionId) {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-      updateActiveButton(sectionId);
-    }
+    // Navigation scroll with anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
 
     // Update active button in toolbar
     function updateActiveButton(sectionId) {
-      document.querySelectorAll('.tb-btn').forEach(btn => btn.classList.remove('active'));
-      const buttons = document.querySelectorAll('.tb-btn');
-      buttons.forEach(btn => {
-        if (btn.textContent.toLowerCase().includes(sectionId.replace(/ó/g, 'o').replace(/ue/g, 'ue'))) {
-          btn.classList.add('active');
+      document.querySelectorAll('#toolbar .tb-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('#toolbar a').forEach(link => {
+        if (link.getAttribute('href') === '#' + sectionId) {
+          link.classList.add('active');
         }
       });
     }
@@ -705,26 +704,6 @@
       alert('¡Gracias por tu mensaje! Nos pondremos en contacto pronto.');
       event.target.reset();
     }
-
-    // Reveal animation on scroll
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -100px 0px'
-    };
-
-    const observer = new IntersectionObserver(function(entries) {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    // Observe elements
-    window.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    });
 
     // Update toolbar on scroll
     window.addEventListener('scroll', () => {
