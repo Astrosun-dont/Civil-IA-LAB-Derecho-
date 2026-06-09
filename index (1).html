@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Civil IA Lab – UTN</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --red:      #C8102E;
+      --red-dark: #8B0B1F;
+      --red-glow: rgba(200,16,46,0.18);
+      --white:    #F5F5F5;
+      --black:    #0D0D0D;
+      --gray-dk:  #1A1A1A;
+      --gray-md:  #2E2E2E;
+      --gray-lt:  #888;
+      --border:   rgba(255,255,255,0.08);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', sans-serif;
+      --font-mono:    'Space Mono', monospace;
+    }
+
+    /* ── RESET & BASE ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── HERO ───────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 2rem 1.5rem 4rem;
+      text-align: center;
+    }
+
+    /* animated grid background */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,16,46,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,16,46,0.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridDrift 20s linear infinite;
+      z-index: 0;
+    }
+    @keyframes gridDrift {
+      from { transform: translateY(0); }
+      to   { transform: translateY(48px); }
+    }
+
+    /* scanline sweep */
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(200,16,46,0.04) 50%,
+        transparent 100%
+      );
+      background-size: 100% 6px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 860px; }
+
+    /* glow orb behind title */
+    .hero-orb {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,16,46,0.22) 0%, transparent 70%);
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulse 4s ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%,-50%) scale(1);   opacity: 1; }
+      50%       { transform: translate(-50%,-50%) scale(1.1); opacity: 0.7; }
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      letter-spacing: .18em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+      opacity: 0;
+      animation: fadeUp .6s .2s forwards;
+    }
+
+    /* ── SIGNATURE ELEMENT: letter-by-letter reveal title ─── */
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 9vw, 7.5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -.02em;
+      margin-bottom: .4rem;
+    }
+    .hero-title span.word {
+      display: inline-block;
+      overflow: hidden;
+      margin-right: .2em;
+    }
+    .hero-title span.char {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(60px) rotate(3deg);
+      animation: charIn .5s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    /* colors: Civil=white, IA=red, Lab=gray */
+    .word-civil .char { color: var(--white); }
+    .word-ia    .char { color: var(--red);   }
+    .word-lab   .char { color: var(--gray-lt); }
+
+    @keyframes charIn {
+      to { opacity: 1; transform: translateY(0) rotate(0deg); }
+    }
+
+    .hero-sub {
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--gray-lt);
+      margin-top: 1rem;
+      max-width: 640px;
+      margin-inline: auto;
+      opacity: 0;
+      animation: fadeUp .6s 1.6s forwards;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      margin-top: 2rem;
+      padding: .45rem 1.1rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: .78rem;
+      font-family: var(--font-mono);
+      color: var(--gray-lt);
+      letter-spacing: .08em;
+      opacity: 0;
+      animation: fadeUp .6s 1.8s forwards;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--red);
+      animation: blink 1.4s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── TOOLBAR NAV ────────────────────────────────────────── */
+    #toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13,13,13,.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: .85rem 1.5rem;
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .tb-btn {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--gray-lt);
+      padding: .45rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: color .2s, border-color .2s, background .2s;
+      white-space: nowrap;
+    }
+    .tb-btn:hover, .tb-btn.active {
+      color: var(--white);
+      border-color: var(--red);
+      background: rgba(200,16,46,.1);
+    }
+
+    /* ── SECTION WRAPPER ────────────────────────────────────── */
+    .section {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 6rem 1.5rem;
+    }
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      letter-spacing: .2em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: .8rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .section-divider {
+      width: 48px;
+      height: 3px;
+      background: var(--red);
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── QUIÉNES SOMOS ──────────────────────────────────────── */
+    #quienes { background: var(--gray-dk); }
+    .qs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .qs-card {
+      background: var(--gray-md);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: border-color .2s, transform .2s;
+    }
+    .qs-card:hover { border-color: var(--red); transform: translateY(-3px); }
+    .qs-role {
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      letter-spacing: .12em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: .4rem;
+    }
+    .qs-name { font-weight: 600; font-size: 1rem; margin-bottom: .2rem; }
+    .qs-email { font-size: .78rem; color: var(--gray-lt); }
+
+    .mission-block {
+      margin-top: 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    @media(max-width:640px){ .mission-block { grid-template-columns: 1fr; } }
+    .mission-card {
+      border-left: 3px solid var(--red);
+      padding-left: 1.4rem;
+    }
+    .mission-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin-bottom: .6rem;
+    }
+    .mission-card p { color: var(--gray-lt); font-size: .9rem; }
+
+    /* ── TRABAJOS TERMINADOS ────────────────────────────────── */
+    #trabajos { background: var(--black); }
+    .trabajos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+    .trabajo-card {
+      background: var(--gray-dk);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color .2s, transform .2s;
+    }
+    .trabajo-card:hover { border-color: var(--red); transform: translateY(-4px); }
+    .trabajo-header {
+      padding: 1.4rem 1.4rem .8rem;
+    }
+    .trabajo-num {
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      letter-spacing: .15em;
+      color: var(--red);
+      margin-bottom: .4rem;
+    }
+    .trabajo-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+    }
+    .trabajo-desc { font-size: .875rem; color: var(--gray-lt); line-height: 1.6; }
+    .trabajo-media {
+      padding: .8rem 1.4rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+    .media-label {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .12em;
+      color: var(--gray-lt);
+      text-transform: uppercase;
+      margin-bottom: .2rem;
+    }
+    .media-links { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .media-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .75rem;
+      font-family: var(--font-mono);
+      padding: .35rem .8rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      color: var(--gray-lt);
+      transition: color .2s, border-color .2s, background .2s;
+    }
+    .media-link:hover { color: var(--white); border-color: var(--red); background: var(--red-glow); }
+    .media-link.yt  { --accent: #FF0000; }
+    .media-link.tt  { --accent: #69C9D0; }
+    .media-link.ig  { --accent: #E1306C; }
+    .media-link:hover { border-color: var(--accent, var(--red)); }
+
+    /* ── PROCESO DE ELABORACIÓN ─────────────────────────────── */
+    #proceso { background: var(--gray-dk); }
+    .proceso-list {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .proceso-item {
+      background: var(--gray-md);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .proceso-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 1.2rem 1.5rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: var(--white);
+      text-align: left;
+      transition: background .2s;
+    }
+    .proceso-trigger:hover { background: rgba(200,16,46,.07); }
+    .proceso-thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: var(--gray-dk);
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      color: var(--red);
+    }
+    .proceso-meta { flex: 1; }
+    .proceso-meta-num {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      color: var(--red);
+      letter-spacing: .1em;
+    }
+    .proceso-meta-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: .15rem 0 .25rem;
+    }
+    .proceso-meta-sub { font-size: .8rem; color: var(--gray-lt); }
+    .proceso-arrow {
+      font-size: 1.1rem;
+      color: var(--gray-lt);
+      transition: transform .3s;
+      flex-shrink: 0;
+    }
+    .proceso-item.open .proceso-arrow { transform: rotate(180deg); }
+
+    .proceso-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .45s ease;
+    }
+    .proceso-item.open .proceso-body { max-height: 800px; }
+    .proceso-inner {
+      padding: 0 1.5rem 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media(max-width:640px){ .proceso-inner { grid-template-columns: 1fr; } }
+    .proceso-info h4 {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      color: var(--red);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: .6rem;
+    }
+    .proceso-info p { font-size: .875rem; color: var(--gray-lt); line-height: 1.65; }
+    .proceso-info ul {
+      list-style: none;
+      padding: 0;
+      margin-top: .6rem;
+    }
+    .proceso-info ul li {
+      font-size: .85rem;
+      color: var(--gray-lt);
+      padding: .3rem 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .proceso-info ul li::before {
+      content: '▸';
+      color: var(--red);
+      font-size: .6rem;
+    }
+    .proceso-img-placeholder {
+      background: var(--gray-dk);
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      height: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      color: var(--gray-lt);
+      font-size: .75rem;
+      font-family: var(--font-mono);
+      text-align: center;
+      padding: 1rem;
+    }
+    .proceso-img-placeholder span { font-size: 2rem; }
+
+    /* ── REDES SOCIALES ─────────────────────────────────────── */
+    #redes { background: var(--black); }
+    .redes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.2rem;
+      margin-top: 2.5rem;
+    }
+    .red-card {
+      background: var(--gray-dk);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.6rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: .6rem;
+      transition: border-color .2s, transform .2s;
+    }
+    .red-card:hover { border-color: var(--red); transform: translateY(-3px); }
+    .red-icon { font-size: 2rem; }
+    .red-platform {
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      letter-spacing: .12em;
+      color: var(--red);
+      text-transform: uppercase;
+    }
+    .red-handle { font-weight: 600; font-size: 1rem; }
+    .red-link {
+      font-size: .75rem;
+      color: var(--gray-lt);
+      word-break: break-all;
+    }
+
+    /* ── CONTACTO ───────────────────────────────────────────── */
+    #contacto { background: var(--gray-dk); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 2.5rem;
+    }
+    @media(max-width:720px){ .contact-grid { grid-template-columns: 1fr; } }
+    .contact-info p { color: var(--gray-lt); font-size: .9rem; margin-bottom: 1.2rem; }
+    .contact-detail {
+      display: flex;
+      flex-direction: column;
+      gap: .8rem;
+      margin-top: 1.5rem;
+    }
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: .8rem;
+      font-size: .875rem;
+    }
+    .contact-row span:first-child {
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      color: var(--red);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      min-width: 70px;
+      padding-top: .05rem;
+    }
+    .contact-row span:last-child { color: var(--gray-lt); }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-group label {
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--gray-lt);
+    }
+    .form-group input,
+    .form-group textarea {
+      background: var(--gray-md);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: .75rem 1rem;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: .9rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--red); }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .btn-submit {
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      background: var(--red);
+      color: var(--white);
+      border: none;
+      border-radius: 7px;
+      padding: .85rem 1.5rem;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      align-self: flex-start;
+    }
+    .btn-submit:hover { background: var(--red-dark); transform: translateY(-1px); }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      font-size: .75rem;
+      color: var(--gray-lt);
+      font-family: var(--font-mono);
+      letter-spacing: .06em;
+    }
+    footer strong { color: var(--red); }
+
+    /* ── SCROLL REVEAL ──────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section id="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Universidad Técnica del Norte · Carrera de Derecho</p>
+    <h1 class="hero-title" aria-label="Civil IA Lab">
+      <span class="word word-civil"></span>
+      <span class="word word-ia"></span>
+      <span class="word word-lab"></span>
+    </h1>
+    <p class="hero-sub">Investigación dinámica del Derecho Civil Ecuatoriano mediante inteligencia artificial y gamificación jurídica</p>
+    <div class="hero-badge">Semillero de Investigación activo · UTN 2025</div>
+  </div>
+</section>
+
+<!-- ══════════════ BARRA DE HERRAMIENTAS ══════════════ -->
+<nav id="toolbar" aria-label="Navegación de secciones">
+  <a class="tb-btn" href="#quienes">⚖ Quiénes Somos</a>
+  <a class="tb-btn" href="#trabajos">🎬 Trabajos Terminados</a>
+  <a class="tb-btn" href="#proceso">🔬 Proceso de Elaboración</a>
+  <a class="tb-btn" href="#redes">📡 Redes Sociales</a>
+  <a class="tb-btn" href="#contacto">✉ Contacto</a>
+</nav>
+
+<!-- ══════════════ QUIÉNES SOMOS ══════════════ -->
+<section id="quienes">
+  <div class="section">
+    <p class="section-eyebrow reveal">01 / Quiénes Somos</p>
+    <h2 class="section-title reveal">El equipo detrás de Civil IA Lab</h2>
+    <div class="section-divider reveal"></div>
+    <p class="reveal" style="color:var(--gray-lt);max-width:680px;font-size:.95rem;">
+      Somos un semillero de investigación de la <strong style="color:var(--white)">Universidad Técnica del Norte</strong>, 
+      carrera de Derecho. Transformamos la enseñanza del Derecho Civil Ecuatoriano combinando 
+      inteligencia artificial, gamificación jurídica y producción multimedia.
+    </p>
+
+    <div class="qs-grid reveal">
+      <div class="qs-card">
+        <div class="qs-role">Docente Coordinador</div>
+        <div class="qs-name">Hugo Patricio Torres Andrade</div>
+        <div class="qs-email">hptorres@utn.edu.ec</div>
+      </div>
+      <div class="qs-card">
+        <div class="qs-role">Estudiante Coordinadora</div>
+        <div class="qs-name">Damaris Pamela Torres Trujillo</div>
+        <div class="qs-email">dptorrest2@utn.edu.ec</div>
+      </div>
+      <div class="qs-card">
+        <div class="qs-role">Investigador</div>
+        <div class="qs-name">Mateo José Montenegro España</div>
+        <div class="qs-email">mjmontenegro@utn.edu.ec</div>
+      </div>
+      <div class="qs-card">
+        <div class="qs-role">Investigadora</div>
+        <div class="qs-name">Andrea Estefanía Guamialamá Vásquez</div>
+        <div class="qs-email">aeguamialamav@utn.edu.ec</div>
+      </div>
+      <div class="qs-card">
+        <div class="qs-role">Investigador</div>
+        <div class="qs-name">Juan Carlos Quishpe Mera</div>
+        <div class="qs-email">jcquishpem@utn.edu.ec</div>
+      </div>
+    </div>
+
+    <div class="mission-block reveal">
+      <div class="mission-card">
+        <h3>Objetivo General</h3>
+        <p>Investigar y comprender contenidos jurídicos complejos del Derecho Civil ecuatoriano 
+        mediante aprendizaje colaborativo, uso ético de IA y estrategias de gamificación jurídica.</p>
+      </div>
+      <div class="mission-card">
+        <h3>Línea de Investigación</h3>
+        <p>Gestión, calidad de la educación y procesos pedagógicos · Desarrollo social y del 
+        comportamiento humano · ODS 16: Paz, justicia e instituciones sólidas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ TRABAJOS TERMINADOS ══════════════ -->
+<section id="trabajos">
+  <div class="section">
+    <p class="section-eyebrow reveal">02 / Trabajos Terminados</p>
+    <h2 class="section-title reveal">5 temas investigados con IA</h2>
+    <div class="section-divider reveal"></div>
+    <p class="reveal" style="color:var(--gray-lt);max-width:680px;font-size:.95rem;margin-bottom:.5rem;">
+      Cada tema explora el Título Preliminar y el Libro Primero del Código Civil Ecuatoriano 
+      desde una metodología activa: investigación normativa, simulación, gamificación y producción audiovisual.
+    </p>
+
+    <div class="trabajos-grid">
+
+      <!-- TEMA 1 -->
+      <article class="trabajo-card reveal">
+        <div class="trabajo-header">
+          <div class="trabajo-num">TEMA 01</div>
+          <div class="trabajo-title">Temporalidad y Obligatoriedad de la Ley Civil</div>
+          <p class="trabajo-desc">Análisis de la vigencia, efectos en el tiempo y obligatoriedad de las normas civiles ecuatorianas, con apoyo de herramientas de IA jurídica y simulación de casos reales.</p>
+        </div>
+        <div class="trabajo-media">
+          <div class="media-label">Contenido multimedia</div>
+          <div class="media-links">
+            <a class="media-link yt" href="TU_LINK_YOUTUBE" target="_blank">▶ YouTube</a>
+            <a class="media-link tt" href="TU_LINK_TIKTOK" target="_blank">♪ TikTok</a>
+            <a class="media-link ig" href="TU_LINK_INSTAGRAM" target="_blank">◉ Instagram</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- TEMA 2 -->
+      <article class="trabajo-card reveal">
+        <div class="trabajo-header">
+          <div class="trabajo-num">TEMA 02</div>
+          <div class="trabajo-title">Capacidad Jurídica de Personas Naturales</div>
+          <p class="trabajo-desc">Estudio de la capacidad legal, incapacidades, representación y sus efectos en actos jurídicos civiles. Incluye debate jurídico y resolución de casos mediante IA.</p>
+        </div>
+        <div class="trabajo-media">
+          <div class="media-label">Contenido multimedia</div>
+          <div class="media-links">
+            <a class="media-link yt" href="TU_LINK_YOUTUBE" target="_blank">▶ YouTube</a>
+            <a class="media-link tt" href="TU_LINK_TIKTOK" target="_blank">♪ TikTok</a>
+            <a class="media-link ig" href="TU_LINK_INSTAGRAM" target="_blank">◉ Instagram</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- TEMA 3 -->
+      <article class="trabajo-card reveal">
+        <div class="trabajo-header">
+          <div class="trabajo-num">TEMA 03</div>
+          <div class="trabajo-title">Personas Jurídicas en el Derecho Civil</div>
+          <p class="trabajo-desc">Naturaleza, clasificación, constitución y régimen jurídico de las personas jurídicas en el ordenamiento civil ecuatoriano, analizadas con técnicas de gamificación.</p>
+        </div>
+        <div class="trabajo-media">
+          <div class="media-label">Contenido multimedia</div>
+          <div class="media-links">
+            <a class="media-link yt" href="TU_LINK_YOUTUBE" target="_blank">▶ YouTube</a>
+            <a class="media-link tt" href="TU_LINK_TIKTOK" target="_blank">♪ TikTok</a>
+            <a class="media-link ig" href="TU_LINK_INSTAGRAM" target="_blank">◉ Instagram</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- TEMA 4 -->
+      <article class="trabajo-card reveal">
+        <div class="trabajo-header">
+          <div class="trabajo-num">TEMA 04</div>
+          <div class="trabajo-title">Domicilio y Estado Civil</div>
+          <p class="trabajo-desc">Definición, clasificación y efectos jurídicos del domicilio y el estado civil en el Código Civil ecuatoriano, con resolución de casos prácticos y audiencias simuladas.</p>
+        </div>
+        <div class="trabajo-media">
+          <div class="media-label">Contenido multimedia</div>
+          <div class="media-links">
+            <a class="media-link yt" href="TU_LINK_YOUTUBE" target="_blank">▶ YouTube</a>
+            <a class="media-link tt" href="TU_LINK_TIKTOK" target="_blank">♪ TikTok</a>
+            <a class="media-link ig" href="TU_LINK_INSTAGRAM" target="_blank">◉ Instagram</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- TEMA 5 -->
+      <article class="trabajo-card reveal">
+        <div class="trabajo-header">
+          <div class="trabajo-num">TEMA 05</div>
+          <div class="trabajo-title">Bienes y Clasificación en el Código Civil</div>
+          <p class="trabajo-desc">Categorización jurídica de los bienes, su régimen y relevancia práctica, investigados mediante bufetes jurídicos simulados y análisis crítico con herramientas de IA.</p>
+        </div>
+        <div class="trabajo-media">
+          <div class="media-label">Contenido multimedia</div>
+          <div class="media-links">
+            <a class="media-link yt" href="TU_LINK_YOUTUBE" target="_blank">▶ YouTube</a>
+            <a class="media-link tt" href="TU_LINK_TIKTOK" target="_blank">♪ TikTok</a>
+            <a class="media-link ig" href="TU_LINK_INSTAGRAM" target="_blank">◉ Instagram</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PROCESO DE ELABORACIÓN ══════════════ -->
+<section id="proceso">
+  <div class="section">
+    <p class="section-eyebrow reveal">03 / Proceso de Elaboración</p>
+    <h2 class="section-title reveal">Cómo construimos cada tema</h2>
+    <div class="section-divider reveal"></div>
+    <p class="reveal" style="color:var(--gray-lt);max-width:680px;font-size:.95rem;">
+      Cada tema siguió un proceso riguroso: investigación normativa con fuentes verificadas, 
+      análisis con IA jurídica, producción multimedia y presentación en simulación de audiencias.
+    </p>
+
+    <div class="proceso-list reveal">
+
+      <!-- PROCESO 1 -->
+      <div class="proceso-item">
+        <button class="proceso-trigger" onclick="toggleProceso(this)">
+          <div class="proceso-thumb">⚖</div>
+          <div class="proceso-meta">
+            <div class="proceso-meta-num">TEMA 01</div>
+            <div class="proceso-meta-title">Temporalidad y Obligatoriedad de la Ley Civil</div>
+            <div class="proceso-meta-sub">Código Civil · Título Preliminar · Arts. 1–8</div>
+          </div>
+          <span class="proceso-arrow">▼</span>
+        </button>
+        <div class="proceso-body">
+          <div class="proceso-inner">
+            <div class="proceso-info">
+              <h4>Fuentes y metodología</h4>
+              <p>Investigación basada en el Código Civil ecuatoriano (2005), la Constitución de la República (2021), y doctrina de Alessandri Rodríguez et al. Se usaron plataformas LEXIS y Fiel Web para verificación normativa.</p>
+              <ul>
+                <li>Investigación bibliográfica y normativa</li>
+                <li>Análisis con ChatGPT y Canva IA</li>
+                <li>Simulación de audiencias · Debate jurídico</li>
+                <li>Producción de video y rúbricas de evaluación</li>
+              </ul>
+            </div>
+            <div class="proceso-img-placeholder">
+              <span>🖼</span>
+              Añade aquí la captura del proceso o foto de la actividad
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROCESO 2 -->
+      <div class="proceso-item">
+        <button class="proceso-trigger" onclick="toggleProceso(this)">
+          <div class="proceso-thumb">👤</div>
+          <div class="proceso-meta">
+            <div class="proceso-meta-num">TEMA 02</div>
+            <div class="proceso-meta-title">Capacidad Jurídica de Personas Naturales</div>
+            <div class="proceso-meta-sub">Libro Primero · Título I · Arts. 20–47</div>
+          </div>
+          <span class="proceso-arrow">▼</span>
+        </button>
+        <div class="proceso-body">
+          <div class="proceso-inner">
+            <div class="proceso-info">
+              <h4>Fuentes y metodología</h4>
+              <p>Estudio de normas sobre capacidad absoluta e incapacidades relativas. Comparación doctrinal con Atienza (2012) y casos prácticos resueltos en formato de bufete jurídico simulado.</p>
+              <ul>
+                <li>Revisión normativa artículo por artículo</li>
+                <li>Casos prácticos de incapacidad y representación</li>
+                <li>Uso de IA para síntesis y resumen jurídico</li>
+                <li>Infografías y presentaciones multimedia</li>
+              </ul>
+            </div>
+            <div class="proceso-img-placeholder">
+              <span>🖼</span>
+              Añade aquí la captura del proceso o foto de la actividad
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROCESO 3 -->
+      <div class="proceso-item">
+        <button class="proceso-trigger" onclick="toggleProceso(this)">
+          <div class="proceso-thumb">🏛</div>
+          <div class="proceso-meta">
+            <div class="proceso-meta-num">TEMA 03</div>
+            <div class="proceso-meta-title">Personas Jurídicas en el Derecho Civil</div>
+            <div class="proceso-meta-sub">Libro Primero · Título XXX</div>
+          </div>
+          <span class="proceso-arrow">▼</span>
+        </button>
+        <div class="proceso-body">
+          <div class="proceso-inner">
+            <div class="proceso-info">
+              <h4>Fuentes y metodología</h4>
+              <p>Clasificación y constitución de personas jurídicas según el Código Civil y la Ley de Compañías. Análisis crítico con herramientas de IA sobre responsabilidad y extinción de entes jurídicos.</p>
+              <ul>
+                <li>Código Civil y Ley de Compañías</li>
+                <li>Gamificación: retos y rankings grupales</li>
+                <li>Video explicativo con casos reales</li>
+                <li>Encuestas estudiantiles post-actividad</li>
+              </ul>
+            </div>
+            <div class="proceso-img-placeholder">
+              <span>🖼</span>
+              Añade aquí la captura del proceso o foto de la actividad
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROCESO 4 -->
+      <div class="proceso-item">
+        <button class="proceso-trigger" onclick="toggleProceso(this)">
+          <div class="proceso-thumb">📍</div>
+          <div class="proceso-meta">
+            <div class="proceso-meta-num">TEMA 04</div>
+            <div class="proceso-meta-title">Domicilio y Estado Civil</div>
+            <div class="proceso-meta-sub">Libro Primero · Títulos X–XI</div>
+          </div>
+          <span class="proceso-arrow">▼</span>
+        </button>
+        <div class="proceso-body">
+          <div class="proceso-inner">
+            <div class="proceso-info">
+              <h4>Fuentes y metodología</h4>
+              <p>Investigación sobre tipos de domicilio, sus efectos y el sistema de registro del estado civil. Resolución de controversias simuladas con argumentación jurídica estructurada.</p>
+              <ul>
+                <li>Código Civil y Ley de Registro Civil</li>
+                <li>ABP: resolución de casos controvertidos</li>
+                <li>Debate jurídico grabado en video</li>
+                <li>Formularios digitales de evaluación</li>
+              </ul>
+            </div>
+            <div class="proceso-img-placeholder">
+              <span>🖼</span>
+              Añade aquí la captura del proceso o foto de la actividad
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROCESO 5 -->
+      <div class="proceso-item">
+        <button class="proceso-trigger" onclick="toggleProceso(this)">
+          <div class="proceso-thumb">📦</div>
+          <div class="proceso-meta">
+            <div class="proceso-meta-num">TEMA 05</div>
+            <div class="proceso-meta-title">Bienes y Clasificación en el Código Civil</div>
+            <div class="proceso-meta-sub">Libro Segundo · Título I</div>
+          </div>
+          <span class="proceso-arrow">▼</span>
+        </button>
+        <div class="proceso-body">
+          <div class="proceso-inner">
+            <div class="proceso-info">
+              <h4>Fuentes y metodología</h4>
+              <p>Clasificación de bienes muebles, inmuebles, fungibles y no fungibles, con énfasis en su régimen jurídico práctico. Análisis comparativo con jurisprudencia y uso de plataformas digitales.</p>
+              <ul>
+                <li>Código Civil Libros I y II</li>
+                <li>LEXIS: jurisprudencia relevante</li>
+                <li>Análisis con IA: síntesis crítica</li>
+                <li>Simulación final de audiencia civil</li>
+              </ul>
+            </div>
+            <div class="proceso-img-placeholder">
+              <span>🖼</span>
+              Añade aquí la captura del proceso o foto de la actividad
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ REDES SOCIALES ══════════════ -->
+<section id="redes">
+  <div class="section">
+    <p class="section-eyebrow reveal">04 / Redes Sociales</p>
+    <h2 class="section-title reveal">Síguenos y comparte</h2>
+    <div class="section-divider reveal"></div>
+
+    <div class="redes-grid reveal">
+      <a class="red-card" href="TU_LINK_YOUTUBE" target="_blank">
+        <div class="red-icon">▶</div>
+        <div class="red-platform">YouTube</div>
+        <div class="red-handle">@CivilIALab</div>
+        <div class="red-link">youtube.com/@CivilIALab</div>
+      </a>
+      <a class="red-card" href="TU_LINK_TIKTOK" target="_blank">
+        <div class="red-icon">♪</div>
+        <div class="red-platform">TikTok</div>
+        <div class="red-handle">@civilialab</div>
+        <div class="red-link">tiktok.com/@civilialab</div>
+      </a>
+      <a class="red-card" href="TU_LINK_INSTAGRAM" target="_blank">
+        <div class="red-icon">◉</div>
+        <div class="red-platform">Instagram</div>
+        <div class="red-handle">@civil_ia_lab</div>
+        <div class="red-link">instagram.com/civil_ia_lab</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ CONTACTO ══════════════ -->
+<section id="contacto">
+  <div class="section">
+    <p class="section-eyebrow reveal">05 / Contacto</p>
+    <h2 class="section-title reveal">Escríbenos</h2>
+    <div class="section-divider reveal"></div>
+
+    <div class="contact-grid reveal">
+      <div class="contact-info">
+        <p>¿Tienes preguntas sobre el proyecto, quieres colaborar o necesitas más información sobre nuestra investigación?</p>
+        <div class="contact-detail">
+          <div class="contact-row">
+            <span>Institución</span>
+            <span>Universidad Técnica del Norte – Carrera de Derecho</span>
+          </div>
+          <div class="contact-row">
+            <span>Docente</span>
+            <span>hptorres@utn.edu.ec</span>
+          </div>
+          <div class="contact-row">
+            <span>Coordinadora</span>
+            <span>dptorrest2@utn.edu.ec</span>
+          </div>
+          <div class="contact-row">
+            <span>Ciudad</span>
+            <span>Ibarra, Imbabura, Ecuador</span>
+          </div>
+        </div>
+      </div>
+      <form class="contact-form" onsubmit="return false;">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" placeholder="Tu nombre completo" />
+        </div>
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" placeholder="tucorreo@ejemplo.com" />
+        </div>
+        <div class="form-group">
+          <label>Mensaje</label>
+          <textarea placeholder="Escribe tu mensaje aquí…"></textarea>
+        </div>
+        <button class="btn-submit" type="submit">Enviar mensaje →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <strong>Civil IA Lab</strong> · Universidad Técnica del Norte · Carrera de Derecho · Ibarra, Ecuador · 2025
+</footer>
+
+<!-- ══════════════ SCRIPTS ══════════════ -->
+<script>
+  /* ── TITLE CHAR ANIMATION ── */
+  const words = {
+    'word-civil': 'Civil',
+    'word-ia':    'IA',
+    'word-lab':   'Lab'
+  };
+  let delay = 0.4;
+  Object.entries(words).forEach(([cls, text]) => {
+    const el = document.querySelector('.' + cls);
+    [...text].forEach(ch => {
+      const s = document.createElement('span');
+      s.className = 'char';
+      s.textContent = ch;
+      s.style.animationDelay = delay + 's';
+      el.appendChild(s);
+      delay += 0.07;
+    });
+  });
+
+  /* ── SCROLL REVEAL ── */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ── ACCORDION ── */
+  function toggleProceso(btn) {
+    const item = btn.closest('.proceso-item');
+    item.classList.toggle('open');
+  }
+
+  /* ── TOOLBAR ACTIVE STATE ── */
+  const sections = document.querySelectorAll('section[id]');
+  const btns     = document.querySelectorAll('.tb-btn');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 140) cur = s.id; });
+    btns.forEach(b => b.classList.toggle('active', b.getAttribute('href') === '#' + cur));
+  }, { passive: true });
+</script>
+</body>
+</html>
