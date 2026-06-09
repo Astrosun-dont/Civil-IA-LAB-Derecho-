@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proceso de Elaboración – Civil IA Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red:      #C8102E;
+      --red-dark: #8B0B1F;
+      --red-glow: rgba(200,16,46,0.18);
+      --white:    #F5F5F5;
+      --black:    #0D0D0D;
+      --gray-dk:  #1A1A1A;
+      --gray-md:  #2E2E2E;
+      --gray-lt:  #888;
+      --border:   rgba(255,255,255,0.08);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', sans-serif;
+      --font-mono:    'Space Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* HEADER */
+    #header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13, 13, 13, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .header-back {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-lt);
+      padding: 0.45rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .header-back:hover {
+      color: var(--white);
+      border-color: var(--red);
+      background: rgba(200, 16, 46, 0.1);
+    }
+    .header-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      font-weight: 700;
+    }
+
+    /* MAIN CONTENT */
+    .container { max-width: 1120px; margin: 0 auto; padding: 4rem 1.5rem; }
+    .section { margin-bottom: 4rem; }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .section-subtitle {
+      font-size: 0.9rem;
+      color: var(--gray-lt);
+      margin-bottom: 2rem;
+      max-width: 800px;
+    }
+    .divider { width: 48px; height: 3px; background: var(--red); margin-bottom: 2rem; }
+
+    /* PROCESO CONTENT */
+    .proceso-content {
+      background: var(--gray-dk);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .proceso-content h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--red);
+    }
+    .proceso-content p {
+      margin-bottom: 1rem;
+      color: var(--gray-lt);
+      line-height: 1.8;
+    }
+    .proceso-content ul {
+      list-style: none;
+      padding: 0;
+      margin: 1.5rem 0;
+    }
+    .proceso-content ul li {
+      padding: 0.6rem 0;
+      padding-left: 1.5rem;
+      color: var(--gray-lt);
+      position: relative;
+    }
+    .proceso-content ul li::before {
+      content: '▸';
+      color: var(--red);
+      position: absolute;
+      left: 0;
+      font-size: 0.8rem;
+    }
+
+    /* GRID LAYOUT */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--gray-md);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .card:hover {
+      border-color: var(--red);
+      transform: translateY(-3px);
+    }
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+    .card-text {
+      font-size: 0.9rem;
+      color: var(--gray-lt);
+      line-height: 1.6;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--gray-lt);
+      font-family: var(--font-mono);
+      letter-spacing: 0.06em;
+    }
+    footer strong { color: var(--red); }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <div id="header">
+    <button class="header-back" onclick="window.history.back()">← Volver</button>
+    <h1 class="header-title">Proceso de Elaboración</h1>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <!-- TITLE SECTION -->
+    <div class="section">
+      <h2 class="section-title">Proceso de Desarrollo de Contenido: Persona Natural y Jurídica</h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">Conoce el proceso detallado de cómo se elaboró y validó el contenido educativo sobre Personas Naturales y Jurídicas en nuestro plataforma Civil IA Lab.</p>
+    </div>
+
+    <!-- FASE 1: INVESTIGACIÓN -->
+    <div class="section">
+      <div class="proceso-content">
+        <h3>📚 Fase 1: Investigación y Análisis Jurídico</h3>
+        <p>La primera fase consistió en una investigación exhaustiva de la normativa ecuatoriana relacionada con la personalidad jurídica, tanto de personas naturales como jurídicas.</p>
+        <ul>
+          <li>Análisis del Código Civil Ecuatoriano</li>
+          <li>Revisión de la Ley de Compañías</li>
+          <li>Estudio de jurisprudencia relevante</li>
+          <li>Consulta con expertos en derecho civil</li>
+          <li>Análisis de legislación comparada</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- FASE 2: DESARROLLO -->
+    <div class="section">
+      <div class="proceso-content">
+        <h3>✍️ Fase 2: Desarrollo del Contenido Educativo</h3>
+        <p>Con la base investigativa consolidada, se procedió a desarrollar contenido didáctico y accesible para estudiantes y profesionales del derecho.</p>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Contenido Estructurado</div>
+            <div class="card-text">
+              Organización jerárquica de conceptos desde lo básico hasta lo complejo, facilitando el aprendizaje progresivo.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Ejemplos Prácticos</div>
+            <div class="card-text">
+              Casos reales y contextualizados que ilustran la aplicación de los conceptos jurídicos en situaciones cotidianas.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 3: INTEGRACIÓN IA -->
+    <div class="section">
+      <div class="proceso-content">
+        <h3>🤖 Fase 3: Integración de Inteligencia Artificial</h3>
+        <p>Se incorporaron herramientas de IA para potenciar la experiencia educativa, permitiendo personalización y adaptabilidad.</p>
+        <ul>
+          <li>Implementación de asistentes virtuales basados en IA</li>
+          <li>Generación de preguntas y ejercicios interactivos</li>
+          <li>Análisis automático de comprensión del estudiante</li>
+          <li>Recomendaciones personalizadas de aprendizaje</li>
+          <li>Optimización del contenido basada en datos</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- FASE 4: VALIDACIÓN -->
+    <div class="section">
+      <div class="proceso-content">
+        <h3>✅ Fase 4: Validación y Pruebas</h3>
+        <p>Se realizaron múltiples pruebas para garantizar la precisión jurídica, claridad del contenido y usabilidad de la plataforma.</p>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Validación Jurídica</div>
+            <div class="card-text">
+              Revisión exhaustiva por expertos en derecho civil para asegurar precisión y actualidad de la información.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Pruebas de Usabilidad</div>
+            <div class="card-text">
+              Evaluación con usuarios reales para optimizar la interfaz y la experiencia de aprendizaje.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 5: PUBLICACIÓN -->
+    <div class="section">
+      <div class="proceso-content">
+        <h3>🚀 Fase 5: Publicación y Difusión</h3>
+        <p>El contenido fue publicado en la plataforma Civil IA Lab y puesto a disposición de estudiantes, profesionales y particulares interesados en aprender derecho.</p>
+        <ul>
+          <li>Publicación en la plataforma web</li>
+          <li>Promoción en redes sociales</li>
+          <li>Distribución a través de canales educativos</li>
+          <li>Registro en directorios académicos</li>
+          <li>Monitoreo continuo de retroalimentación</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RESULTADOS -->
+    <div class="section">
+      <h2 class="section-title">Resultados Alcanzados</h2>
+      <div class="divider"></div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">📖 Contenido Robusto</div>
+          <div class="card-text">
+            Se desarrolló un módulo completo sobre Personas Naturales y Jurídicas con explicaciones claras, ejemplos prácticos y referencias legales.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">🎓 Impacto Educativo</div>
+          <div class="card-text">
+            Acceso a educación jurídica de calidad para estudiantes y profesionales, contribuyendo a la difusión del conocimiento en derecho.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">💡 Innovación Tecnológica</div>
+          <div class="card-text">
+            Integración exitosa de IA en educación jurídica, creando una experiencia personalizada y adaptativa.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">🔄 Mejora Continua</div>
+          <div class="card-text">
+            Sistema de retroalimentación que permite ajustes y mejoras periódicas basadas en la experiencia de los usuarios.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 <strong>Civil IA Lab</strong> — Universidad Técnica del Norte | Todos los derechos reservados.</p>
+  </footer>
+</body>
+</html>
