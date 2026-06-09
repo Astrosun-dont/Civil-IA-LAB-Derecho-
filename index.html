@@ -243,6 +243,25 @@
       transition: color .2s, border-color .2s, background .2s;
     }
     .media-link:hover { color: var(--white); background: var(--red-glow); border-color: var(--red); }
+    .btn-trabajo {
+      display: inline-block;
+      margin-top: 1rem;
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      background: var(--red);
+      color: var(--white);
+      border: none;
+      border-radius: 7px;
+      padding: .75rem 1.5rem;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+    }
+    .btn-trabajo:hover {
+      background: var(--red-dark);
+      transform: translateY(-2px);
+    }
 
     /* PROCESO */
     #proceso { background: var(--gray-dk); }
@@ -423,49 +442,17 @@
       <div class="trabajo-card">
         <div class="trabajo-header">
           <div class="trabajo-num">01</div>
-          <h3 class="trabajo-title">Análisis de Jurisprudencia con IA</h3>
-          <p class="trabajo-desc">Sistema de clasificación y análisis de sentencias ecuatorianas utilizando machine learning.</p>
+          <h3 class="trabajo-title">Personas Naturales y Jurídicas</h3>
+          <p class="trabajo-desc">¿Sabías que tú eres una persona jurídica desde que naces… pero una empresa también lo es? Hoy te explico la diferencia que todo estudiante de derecho debe saber.</p>
         </div>
         <div class="trabajo-media">
-          <div class="media-label">Tecnologías</div>
+          <div class="media-label">Categoría</div>
           <div class="media-links">
-            <span class="media-link">Python</span>
-            <span class="media-link">NLP</span>
-            <span class="media-link">TensorFlow</span>
+            <span class="media-link">Derecho Civil</span>
+            <span class="media-link">Educativo</span>
           </div>
         </div>
-      </div>
-
-      <div class="trabajo-card">
-        <div class="trabajo-header">
-          <div class="trabajo-num">02</div>
-          <h3 class="trabajo-title">Plataforma Educativa Gamificada</h3>
-          <p class="trabajo-desc">Aplicación interactiva que transforma el aprendizaje de Derecho Civil en experiencias gamificadas.</p>
-        </div>
-        <div class="trabajo-media">
-          <div class="media-label">Tecnologías</div>
-          <div class="media-links">
-            <span class="media-link">React</span>
-            <span class="media-link">Node.js</span>
-            <span class="media-link">MongoDB</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="trabajo-card">
-        <div class="trabajo-header">
-          <div class="trabajo-num">03</div>
-          <h3 class="trabajo-title">Chatbot Legal Especializado</h3>
-          <p class="trabajo-desc">Asistente IA entrenado en legislación civil ecuatoriana para consultas y asesoramiento jurídico.</p>
-        </div>
-        <div class="trabajo-media">
-          <div class="media-label">Tecnologías</div>
-          <div class="media-links">
-            <span class="media-link">GPT-4</span>
-            <span class="media-link">LangChain</span>
-            <span class="media-link">API REST</span>
-          </div>
-        </div>
+        <button class="btn-trabajo" onclick="window.location.href='personas-naturales-juridicas.html'">Abrir Contenido</button>
       </div>
     </div>
   </section>
