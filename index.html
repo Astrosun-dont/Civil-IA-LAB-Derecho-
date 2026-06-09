@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Civil IA Lab – UTN</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red:      #C8102E;
+      --red-dark: #8B0B1F;
+      --red-glow: rgba(200,16,46,0.18);
+      --white:    #F5F5F5;
+      --black:    #0D0D0D;
+      --gray-dk:  #1A1A1A;
+      --gray-md:  #2E2E2E;
+      --gray-lt:  #888;
+      --border:   rgba(255,255,255,0.08);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', sans-serif;
+      --font-mono:    'Space Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 2rem 1.5rem 4rem;
+      text-align: center;
+    }
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,16,46,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,16,46,0.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridDrift 20s linear infinite;
+      z-index: 0;
+    }
+    @keyframes gridDrift {
+      from { transform: translateY(0); }
+      to   { transform: translateY(48px); }
+    }
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 0%, rgba(200,16,46,0.04) 50%, transparent 100%);
+      background-size: 100% 6px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 860px; }
+    .hero-orb {
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,16,46,0.22) 0%, transparent 70%);
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulse 4s ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%,-50%) scale(1);   opacity: 1; }
+      50%       { transform: translate(-50%,-50%) scale(1.1); opacity: 0.7; }
+    }
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      letter-spacing: .18em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+      opacity: 0;
+      animation: fadeUp .6s .2s forwards;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 9vw, 7.5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -.02em;
+      margin-bottom: .4rem;
+    }
+    .hero-title span.word { display: inline-block; overflow: hidden; margin-right: .2em; }
+    .hero-title span.char {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(60px) rotate(3deg);
+      animation: charIn .5s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    .word-civil .char { color: var(--white); }
+    .word-ia    .char { color: var(--red); }
+    .word-lab   .char { color: var(--gray-lt); }
+    @keyframes charIn { to { opacity: 1; transform: translateY(0) rotate(0deg); } }
+    .hero-sub {
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--gray-lt);
+      margin-top: 1rem;
+      max-width: 640px;
+      margin-inline: auto;
+      opacity: 0;
+      animation: fadeUp .6s 1.6s forwards;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      margin-top: 2rem;
+      padding: .45rem 1.1rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: .78rem;
+      font-family: var(--font-mono);
+      color: var(--gray-lt);
+      letter-spacing: .08em;
+      opacity: 0;
+      animation: fadeUp .6s 1.8s forwards;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--red);
+      animation: blink 1.4s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* TOOLBAR */
+    #toolbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(13,13,13,.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: .85rem 1.5rem;
+      display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center;
+    }
+    .tb-btn {
+      font-family: var(--font-mono);
+      font-size: .72rem; letter-spacing: .07em; text-transform: uppercase;
+      color: var(--gray-lt);
+      padding: .45rem 1rem;
+      border: 1px solid var(--border); border-radius: 6px;
+      cursor: pointer;
+      transition: color .2s, border-color .2s, background .2s;
+      white-space: nowrap;
+    }
+    .tb-btn:hover, .tb-btn.active {
+      color: var(--white); border-color: var(--red); background: rgba(200,16,46,.1);
+    }
+
+    /* SECCIONES BASE */
+    .section { max-width: 1120px; margin: 0 auto; padding: 6rem 1.5rem; }
+    .section-eyebrow {
+      font-family: var(--font-mono); font-size: .7rem; letter-spacing: .2em;
+      color: var(--red); text-transform: uppercase; margin-bottom: .8rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem;
+    }
+    .section-divider { width: 48px; height: 3px; background: var(--red); margin-bottom: 2.5rem; }
+
+    /* QUIÉNES SOMOS */
+    #quienes { background: var(--gray-dk); }
+    .qs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem; margin-top: 2.5rem;
+    }
+    .qs-card {
+      background: var(--gray-md); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.5rem;
+      transition: border-color .2s, transform .2s;
+    }
+    .qs-card:hover { border-color: var(--red); transform: translateY(-3px); }
+    .qs-role {
+      font-family: var(--font-mono); font-size: .65rem; letter-spacing: .12em;
+      color: var(--red); text-transform: uppercase; margin-bottom: .4rem;
+    }
+    .qs-name { font-weight: 600; font-size: 1rem; margin-bottom: .2rem; }
+    .qs-email { font-size: .78rem; color: var(--gray-lt); }
+    .mission-block { margin-top: 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media(max-width:640px){ .mission-block { grid-template-columns: 1fr; } }
+    .mission-card { border-left: 3px solid var(--red); padding-left: 1.4rem; }
+    .mission-card h3 { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: .6rem; }
+    .mission-card p { color: var(--gray-lt); font-size: .9rem; }
+
+    /* TRABAJOS */
+    #trabajos { background: var(--black); }
+    .trabajos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem; margin-top: 2.5rem;
+    }
+    .trabajo-card {
+      background: var(--gray-dk); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+      transition: border-color .2s, transform .2s;
+    }
+    .trabajo-card:hover { border-color: var(--red); transform: translateY(-4px); }
+    .trabajo-header { padding: 1.4rem 1.4rem .8rem; }
+    .trabajo-num { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .15em; color: var(--red); margin-bottom: .4rem; }
+    .trabajo-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; margin-bottom: .5rem; }
+    .trabajo-desc { font-size: .875rem; color: var(--gray-lt); line-height: 1.6; }
+    .trabajo-media { padding: .8rem 1.4rem 1.4rem; display: flex; flex-direction: column; gap: .6rem; }
+    .media-label { font-family: var(--font-mono); font-size: .62rem; letter-spacing: .12em; color: var(--gray-lt); text-transform: uppercase; margin-bottom: .2rem; }
+    .media-links { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .media-link {
+      display: inline-flex; align-items: center; gap: .35rem;
+      font-size: .75rem; font-family: var(--font-mono);
+      padding: .35rem .8rem; border-radius: 6px;
+      border: 1px solid var(--border); color: var(--gray-lt);
+      transition: color .2s, border-color .2s, background .2s;
+    }
+    .media-link:hover { color: var(--white); background: var(--red-glow); border-color: var(--red); }
+
+    /* PROCESO */
+    #proceso { background: var(--gray-dk); }
+    .proceso-list { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
+    .proceso-item {
+      background: var(--gray-md); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+    }
+    .proceso-trigger {
+      width: 100%; display: flex; align-items: center; gap: 1.2rem;
+      padding: 1.2rem 1.5rem; cursor: pointer;
+      background: none; border: none; color: var(--white); text-align: left;
+      transition: background .2s;
+    }
+    .proceso-trigger:hover { background: rgba(200,16,46,.07); }
+    .proceso-thumb {
+      width: 64px; height: 64px; border-radius: 8px;
+      background: var(--gray-dk); flex-shrink: 0;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+    }
+    .proceso-meta { flex: 1; }
+    .proceso-meta-num { font-family: var(--font-mono); font-size: .62rem; color: var(--red); letter-spacing: .1em; }
+    .proceso-meta-title { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin: .15rem 0 .25rem; }
+    .proceso-meta-sub { font-size: .8rem; color: var(--gray-lt); }
+    .proceso-arrow { font-size: 1.1rem; color: var(--gray-lt); transition: transform .3s; flex-shrink: 0; }
+    .proceso-item.open .proceso-arrow { transform: rotate(180deg); }
+    .proceso-body { max-height: 0; overflow: hidden; transition: max-height .45s ease; }
+    .proceso-item.open .proceso-body { max-height: 800px; }
+    .proceso-inner { padding: 0 1.5rem 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media(max-width:640px){ .proceso-inner { grid-template-columns: 1fr; } }
+    .proceso-info h4 { font-family: var(--font-mono); font-size: .68rem; color: var(--red); letter-spacing: .12em; text-transform: uppercase; margin-bottom: .6rem; }
+    .proceso-info p { font-size: .875rem; color: var(--gray-lt); line-height: 1.65; }
+    .proceso-info ul { list-style: none; padding: 0; margin-top: .6rem; }
+    .proceso-info ul li { font-size: .85rem; color: var(--gray-lt); padding: .3rem 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: .5rem; }
+    .proceso-info ul li::before { content: '▸'; color: var(--red); font-size: .6rem; }
+    .proceso-img-placeholder {
+      background: var(--gray-dk); border: 2px dashed var(--border); border-radius: 8px;
+      height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: .4rem; color: var(--gray-lt); font-size: .75rem; font-family: var(--font-mono); text-align: center; padding: 1rem;
+    }
+    .proceso-img-placeholder span { font-size: 2rem; }
+
+    /* REDES */
+    #redes { background: var(--black); }
+    .redes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; margin-top: 2.5rem; }
+    .red-card {
+      background: var(--gray-dk); border: 1px solid var(--border); border-radius: 10px;
+      padding: 1.6rem 1.4rem; display: flex; flex-direction: column; align-items: flex-start; gap: .6rem;
+      transition: border-color .2s, transform .2s;
+    }
+    .red-card:hover { border-color: var(--red); transform: translateY(-3px); }
+    .red-icon { font-size: 2rem; }
+    .red-platform { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .12em; color: var(--red); text-transform: uppercase; }
+    .red-handle { font-weight: 600; font-size: 1rem; }
+    .red-link { font-size: .75rem; color: var(--gray-lt); word-break: break-all; }
+
+    /* CONTACTO */
+    #contacto { background: var(--gray-dk); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2.5rem; }
+    @media(max-width:720px){ .contact-grid { grid-template-columns: 1fr; } }
+    .contact-info p { color: var(--gray-lt); font-size: .9rem; margin-bottom: 1.2rem; }
+    .contact-detail { display: flex; flex-direction: column; gap: .8rem; margin-top: 1.5rem; }
+    .contact-row { display: flex; align-items: flex-start; gap: .8rem; font-size: .875rem; }
+    .contact-row span:first-child { font-family: var(--font-mono); font-size: .65rem; color: var(--red); letter-spacing: .1em; text-transform: uppercase; min-width: 70px; padding-top: .05rem; }
+    .contact-row span:last-child { color: var(--gray-lt); }
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: var(--gray-lt); }
+    .form-group input, .form-group textarea {
+      background: var(--gray-md); border: 1px solid var(--border); border-radius: 7px;
+      padding: .75rem 1rem; color: var(--white); font-family: var(--font-body); font-size: .9rem;
+      outline: none; transition: border-color .2s;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--red); }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .btn-submit {
+      font-family: var(--font-mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase;
+      background: var(--red); color: var(--white); border: none; border-radius: 7px;
+      padding: .85rem 1.5rem; cursor: pointer;
+      transition: background .2s, transform .15s; align-self: flex-start;
+    }
+    .btn-submit:hover { background: var(--red-dark); transform: translateY(-1px); }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; font-size: .75rem; color: var(--gray-lt); font-family: var(--font-mono); letter-spacing: .06em; }
+    footer strong { color: var(--red); }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-orb"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Bienvenido a</div>
+      <h1 class="hero-title">
+        <span class="word word-civil">
+          <span class="char" style="animation-delay: 0.0s;">C</span>
+          <span class="char" style="animation-delay: 0.05s;">i</span>
+          <span class="char" style="animation-delay: 0.1s;">v</span>
+          <span class="char" style="animation-delay: 0.15s;">i</span>
+          <span class="char" style="animation-delay: 0.2s;">l</span>
+        </span>
+        <span class="word word-ia">
+          <span class="char" style="animation-delay: 0.25s;">I</span>
+          <span class="char" style="animation-delay: 0.3s;">A</span>
+        </span>
+        <span class="word word-lab">
+          <span class="char" style="animation-delay: 0.35s;">L</span>
+          <span class="char" style="animation-delay: 0.4s;">a</span>
+          <span class="char" style="animation-delay: 0.45s;">b</span>
+        </span>
+      </h1>
+      <p class="hero-sub">Difundiendo conocimientos de derecho civil con inteligencia artificial</p>
+      <div class="hero-badge">
+        <span>Proyecto UTN</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLBAR -->
+  <div id="toolbar">
+    <button class="tb-btn active" onclick="scrollToSection('quienes')">Quiénes somos</button>
+    <button class="tb-btn" onclick="scrollToSection('trabajos')">Trabajos</button>
+    <button class="tb-btn" onclick="scrollToSection('proceso')">Proceso</button>
+    <button class="tb-btn" onclick="scrollToSection('redes')">Redes</button>
+    <button class="tb-btn" onclick="scrollToSection('contacto')">Contacto</button>
+  </div>
+
+  <!-- QUIÉNES SOMOS -->
+  <section id="quienes" class="section">
+    <div class="section-eyebrow">Sobre nosotros</div>
+    <h2 class="section-title">Quiénes somos</h2>
+    <div class="section-divider"></div>
+    <div class="qs-grid">
+      <div class="qs-card">
+        <div class="qs-role">Dirección</div>
+        <div class="qs-name">Dr. Profesor</div>
+        <div class="qs-email">profesor@utn.edu.ar</div>
+      </div>
+      <div class="qs-card">
+        <div class="qs-role">Desarrollo</div>
+        <div class="qs-name">Equipo Tech</div>
+        <div class="qs-email">tech@civilialab.com</div>
+      </div>
+      <div class="qs-card">
+        <div class="qs-role">Contenido</div>
+        <div class="qs-name">Especialistas</div>
+        <div class="qs-email">contenido@civilialab.com</div>
+      </div>
+    </div>
+    <div class="mission-block">
+      <div class="mission-card">
+        <h3>Misión</h3>
+        <p>Democratizar el acceso a conocimientos de derecho civil mediante tecnología de IA, brindando herramientas educativas innovadoras para estudiantes y profesionales.</p>
+      </div>
+      <div class="mission-card">
+        <h3>Visión</h3>
+        <p>Convertirse en la plataforma líder de educación legal asistida por IA en América Latina, transformando la forma en que se enseña y se aprende derecho civil.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRABAJOS -->
+  <section id="trabajos" class="section">
+    <div class="section-eyebrow">Nuestro trabajo</div>
+    <h2 class="section-title">Proyectos destacados</h2>
+    <div class="section-divider"></div>
+    <div class="trabajos-grid">
+      <div class="trabajo-card">
+        <div class="trabajo-header">
+          <div class="trabajo-num">01</div>
+          <h3 class="trabajo-title">Chatbot Legal IA</h3>
+          <p class="trabajo-desc">Asistente inteligente entrenado en jurisprudencia y doctrina legal para consultas inmediatas.</p>
+        </div>
+        <div class="trabajo-media">
+          <div class="media-label">Tecnologías</div>
+          <div class="media-links">
+            <span class="media-link">Python</span>
+            <span class="media-link">NLP</span>
+            <span class="media-link">API REST</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="trabajo-card">
+        <div class="trabajo-header">
+          <div class="trabajo-num">02</div>
+          <h3 class="trabajo-title">Análisis de Precedentes</h3>
+          <p class="trabajo-desc">Herramienta que utiliza ML para identificar patrones en jurisprudencia y jurisprudencia.</p>
+        </div>
+        <div class="trabajo-media">
+          <div class="media-label">Tecnologías</div>
+          <div class="media-links">
+            <span class="media-link">Machine Learning</span>
+            <span class="media-link">Data Science</span>
+            <span class="media-link">Analytics</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="trabajo-card">
+        <div class="trabajo-header">
+          <div class="trabajo-num">03</div>
+          <h3 class="trabajo-title">Plataforma Educativa</h3>
+          <p class="trabajo-desc">Sistema de aprendizaje personalizado con módulos interactivos y evaluaciones adaptativas.</p>
+        </div>
+        <div class="trabajo-media">
+          <div class="media-label">Tecnologías</div>
+          <div class="media-links">
+            <span class="media-link">React</span>
+            <span class="media-link">Node.js</span>
+            <span class="media-link">MongoDB</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESO -->
+  <section id="proceso" class="section">
+    <div class="section-eyebrow">Cómo funciona</div>
+    <h2 class="section-title">Nuestro Proceso</h2>
+    <div class="section-divider"></div>
+    <div class="proceso-list">
+      <div class="proceso-item">
+        <button class="proceso-trigger" onclick="toggleProcess(this)">
+          <div class="proceso-thumb">📚</div>
+          <div class="proceso-meta">
+            <div class="proceso-meta-num">PASO 01</div>
+            <div class="proceso-meta-title">Recopilación de Conocimiento</div>
+            <div class="proceso-meta-sub">Compilación de doctrina, jurisprudencia y legislación civil vigente</div>
+          </div>
+          <div class="proceso-arrow">▼</div>
+        </button>
+        <div class="proceso-body">
+          <div class="proceso-inner">
+            <div class="proceso-info">
+              <h4>Descripción</h4>
+              <p>Se recopila y organiza toda la información legal relevante de fuentes confiables, instituciones académicas y bases de datos judiciales.</p>
+              <ul>
+                <li>Análisis de legislación vigente</li>
+                <li>Clasificación de jurisprudencia</li>
+                <li>Revisión de doctrina especializada</li>
+              </ul>
+            </div>
+            <div class="proceso-img-placeholder">
+              <span>📖</span>
+              <p>Fase de investigación</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="proceso-item">
+        <button class="proceso-trigger" onclick="toggleProcess(this)">
+          <div class="proceso-thumb">🤖</div>
+          <div class="proceso-meta">
+            <div class="proceso-meta-num">PASO 02</div>
+            <div class="proceso-meta-title">Entrenamiento de Modelos IA</div>
+            <div class="proceso-meta-sub">Desarrollo de algoritmos y redes neuronales especializadas</div>
+          </div>
+          <div class="proceso-arrow">▼</div>
+        </button>
+        <div class="proceso-body">
+          <div class="proceso-inner">
+            <div class="proceso-info">
+              <h4>Descripción</h4>
+              <p>Se entrenan modelos de inteligencia artificial con los datos recopilados para generar respuestas precisas y contextualmente relevantes.</p>
+              <ul>
+                <li>Procesamiento de lenguaje natural (NLP)</li>
+                <li>Machine Learning supervisado</li>
+                <li>Validación con expertos legales</li>
+              </ul>
+            </div>
+            <div class="proceso-img-placeholder">
+              <span>⚙️</span>
+              <p>Fase de desarrollo IA</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="proceso-item">
+        <button class="proceso-trigger" onclick="toggleProcess(this)">
+          <div class="proceso-thumb">🎓</div>
+          <div class="proceso-meta">
+            <div class="proceso-meta-num">PASO 03</div>
+            <div class="proceso-meta-title">Integración Educativa</div>
+            <div class="proceso-meta-sub">Creación de contenido interactivo y experiencias de aprendizaje</div>
+          </div>
+          <div class="proceso-arrow">▼</div>
+        </button>
+        <div class="proceso-body">
+          <div class="proceso-inner">
+            <div class="proceso-info">
+              <h4>Descripción</h4>
+              <p>Se integra la IA en módulos educativos diseñados pedagógicamente para facilitar el aprendizaje activo y significativo.</p>
+              <ul>
+                <li>Diseño instruccional</li>
+                <li>Generación de ejercicios adaptativos</li>
+                <li>Evaluación formativa continua</li>
+              </ul>
+            </div>
+            <div class="proceso-img-placeholder">
+              <span>📊</span>
+              <p>Fase de integración educativa</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="proceso-item">
+        <button class="proceso-trigger" onclick="toggleProcess(this)">
+          <div class="proceso-thumb">🚀</div>
+          <div class="proceso-meta">
+            <div class="proceso-meta-num">PASO 04</div>
+            <div class="proceso-meta-title">Lanzamiento y Mejora Continua</div>
+            <div class="proceso-meta-sub">Despliegue de plataforma con monitoreo y optimización</div>
+          </div>
+          <div class="proceso-arrow">▼</div>
+        </button>
+        <div class="proceso-body">
+          <div class="proceso-inner">
+            <div class="proceso-info">
+              <h4>Descripción</h4>
+              <p>La plataforma se pone en marcha con sistemas de monitoreo para garantizar calidad, seguridad y mejora continua basada en feedback.</p>
+              <ul>
+                <li>Despliegue en producción</li>
+                <li>Monitoreo de performance</li>
+                <li>Actualizaciones según feedback</li>
+              </ul>
+            </div>
+            <div class="proceso-img-placeholder">
+              <span>🎯</span>
+              <p>Fase de optimización</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REDES SOCIALES -->
+  <section id="redes" class="section">
+    <div class="section-eyebrow">Síguenos</div>
+    <h2 class="section-title">Redes Sociales</h2>
+    <div class="section-divider"></div>
+    <div class="redes-grid">
+      <div class="red-card">
+        <div class="red-icon">📘</div>
+        <div class="red-platform">Facebook</div>
+        <div class="red-handle">Civil IA Lab</div>
+        <div class="red-link">facebook.com/civilialab</div>
+      </div>
+      <div class="red-card">
+        <div class="red-icon">𝕏</div>
+        <div class="red-platform">Twitter</div>
+        <div class="red-handle">@civilialab</div>
+        <div class="red-link">twitter.com/civilialab</div>
+      </div>
+      <div class="red-card">
+        <div class="red-icon">💼</div>
+        <div class="red-platform">LinkedIn</div>
+        <div class="red-handle">Civil IA Lab - UTN</div>
+        <div class="red-link">linkedin.com/company/civilialab</div>
+      </div>
+      <div class="red-card">
+        <div class="red-icon">📺</div>
+        <div class="red-platform">YouTube</div>
+        <div class="red-handle">Civil IA Lab</div>
+        <div class="red-link">youtube.com/@civilialab</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" class="section">
+    <div class="section-eyebrow">Ponte en contacto</div>
+    <h2 class="section-title">Contacto</h2>
+    <div class="section-divider"></div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p>¿Tienes preguntas o sugerencias? Nos encantaría escucharte. Completa el formulario y nos pondremos en contacto lo antes posible.</p>
+        <div class="contact-detail">
+          <div class="contact-row">
+            <span>Email</span>
+            <span>info@civilialab.com</span>
+          </div>
+          <div class="contact-row">
+            <span>Teléfono</span>
+            <span>+54 (11) 0000-0000</span>
+          </div>
+          <div class="contact-row">
+            <span>Ubicación</span>
+            <span>Universidad Tecnológica Nacional, Buenos Aires, Argentina</span>
+          </div>
+        </div>
+      </div>
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Correo</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="asunto">Asunto</label>
+          <input type="text" id="asunto" name="asunto" required>
+        </div>
+        <div class="form-group">
+          <label for="mensaje">Mensaje</label>
+          <textarea id="mensaje" name="mensaje" required></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Enviar</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Civil IA Lab – UTN. Todos los derechos reservados. | Hecho con ❤️ por el equipo de <strong>Civil IA Lab</strong></p>
+  </footer>
+
+  <script>
+    // Navigation scroll
+    function scrollToSection(sectionId) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+      updateActiveButton(sectionId);
+    }
+
+    // Update active button in toolbar
+    function updateActiveButton(sectionId) {
+      document.querySelectorAll('.tb-btn').forEach(btn => btn.classList.remove('active'));
+      const buttons = document.querySelectorAll('.tb-btn');
+      buttons.forEach(btn => {
+        if (btn.textContent.toLowerCase().includes(sectionId.replace(/ó/g, 'o').replace(/ue/g, 'ue'))) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    // Toggle process accordion
+    function toggleProcess(button) {
+      const item = button.parentElement;
+      item.classList.toggle('open');
+    }
+
+    // Form submission
+    function handleSubmit(event) {
+      event.preventDefault();
+      alert('¡Gracias por tu mensaje! Nos pondremos en contacto pronto.');
+      event.target.reset();
+    }
+
+    // Reveal animation on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observe elements
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    });
+
+    // Update toolbar on scroll
+    window.addEventListener('scroll', () => {
+      const sections = ['quienes', 'trabajos', 'proceso', 'redes', 'contacto'];
+      let current = '';
+      sections.forEach(sectionId => {
+        const section = document.getElementById(sectionId);
+        if (section) {
+          const sectionTop = section.offsetTop;
+          if (window.pageYOffset >= sectionTop - 200) {
+            current = sectionId;
+          }
+        }
+      });
+      if (current) {
+        updateActiveButton(current);
+      }
+    });
+  </script>
+</body>
+</html>
