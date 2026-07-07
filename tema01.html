@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tema 01 – Civil IA Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red:      #C8102E;
+      --white:    #F5F5F5;
+      --black:    #0D0D0D;
+      --gray-dk:  #1A1A1A;
+      --gray-md:  #2E2E2E;
+      --border:   rgba(255,255,255,0.08);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', sans-serif;
+      --font-mono:    'Space Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--black); color: var(--white); font-family: var(--font-body); line-height: 1.7; }
+    a { color: var(--red); }
+    header { background: rgba(13,13,13,.95); border-bottom: 1px solid var(--border); padding: 1rem 1.5rem; position: sticky; top: 0; }
+    .header-content { max-width: 1120px; margin: 0 auto; display:flex; align-items:center; justify-content:space-between; }
+    .btn-back { background: var(--red); color: var(--white); border: none; padding: .5rem 1rem; border-radius:6px; cursor:pointer; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 3.5rem 1.5rem; }
+    .page-title { font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.6rem); color: var(--white); margin-bottom: .6rem; }
+    .page-subtitle { color: #b8b8b8; margin-bottom: 1.6rem; font-style: italic; }
+    .section { background: var(--gray-dk); border: 1px solid var(--border); border-radius: 10px; padding: 1.4rem; margin-bottom: 1.4rem; }
+    .section h2 { color: var(--red); font-family: var(--font-display); margin-bottom: .6rem; }
+    .content-text p { color: var(--white); margin-bottom: .8rem; }
+    .pdf-link { text-align:center; padding: 1rem; }
+    footer { border-top: 1px solid var(--border); padding: 1.4rem; text-align:center; color: #9a9a9a; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="header-title">Civil IA Lab</div>
+      <button class="btn-back" onclick="window.history.back()">← Volver</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <h1 class="page-title">TEMA 01</h1>
+    <p class="page-subtitle">Página generada a partir del documento fuente. Contenido (extracto) pendiente de extracción automática.</p>
+
+    <div class="section">
+      <h2>Introducción</h2>
+      <div class="content-text">
+        <p>Contenido del Tema 01 extraído del PDF. Aquí se colocará la transcripción y división del material cuando se procese el documento.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Desarrollo</h2>
+      <div class="content-text">
+        <p>Sección de desarrollo: resúmenes, análisis y enlaces relevantes extraídos del PDF.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Conclusión</h2>
+      <div class="content-text">
+        <p>Conclusiones y puntos clave del Tema 01.</p>
+      </div>
+    </div>
+
+    <div class="section pdf-section">
+      <h2>Documento fuente (PDF)</h2>
+      <div class="pdf-link">
+        <p>Ver o descargar el PDF original (Google Drive):</p>
+        <p><a href="https://drive.google.com/file/d/1IdjZgzrba12_HJoGQZsI0SKAgQAwRjyP/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Abrir PDF en Drive</a></p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Preguntas y respuestas (placeholder)</h2>
+      <div class="content-text">
+        <p>Aquí se insertarán las preguntas y respuestas relacionadas con este tema, según el PDF. (Se añadirá automáticamente tras la extracción del documento).</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>© Civil IA Lab – UTN</p>
+  </footer>
+</body>
+</html>
